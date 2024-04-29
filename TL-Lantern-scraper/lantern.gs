@@ -8,90 +8,33 @@ var htmlobject = UrlFetchApp.fetch(buildurl);
 var builddata = htmlobject.getContentText();
 
 // regex parsing
-var geararray = new RegExp(
-  // find the weapons table
-  "<h2[\s\S]*?>Weapons &amp; Armor[\s\S]*?<ul[\s\S]*?" +
-  // match PrimaryWep rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match PrimaryWep traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match SecondaryWep rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match SecondaryWep traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Helmet rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Helmet traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Cloak rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Cloak traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Armor rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Armor traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Gloves rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Gloves traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Legs rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Legs traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Boots rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Boots traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Necklace rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Necklace traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Bracer rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Bracer traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match RingA rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match RingA traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match RingB rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Ring B traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))" +
-  // match Belt rarity and name
-  "(?:(?:[\s\S]*?<li[\s\S]*?<a href=[\s\S]*?color: rgb\\(([\s\S]*?)\\)[\s\S]*?>([\s\S]*?)<\\/a>" +
-  // match Belt traits 3x
-  "[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<[\s\S]*?<div[\s\S]*?>([\s\S]*?)<))" +
-  // OR match empty
-  "|(?:[\s\S]*?<li[\s\S]*?<div class=\"italic group- opacity-80 text-sm\">()()()()))"
-);
+var geararray = 
+  // />Weapons & Armor<\/h2>[\S\s]+?/gm
 
-var match = builddata.match(geararray);
-console.log(match[0]);
+  /(?:(?:style="color: #[A-Z0-9]{6}">(.+)<[\S\s]+?(?:nowrap">(?:(?:\n<span>(\s|.*)<\/span)|(.*))[\S\s]+?)(?:nowrap">(?:(?:\n<span>(\s|.*)<\/span)|(.*))[\S\s]+?)(?:nowrap">(?:(?:\n<span>(\s|.*)<\/span)|(.*))[\S\s]+?))|(?:group- opacity-80 text-sm">(.*)<\/div()()()[\S\s]+?))/gm
 
-};
+var match = [...builddata.matchAll(geararray)];
+
+for (let i = 0; i < match.length; i++) {
+  match[i] = match[i].filter(n => n)
+  match[i].shift()
+  match[i] = match[i].map((x) => x.replace(/&#039;/g, "'"))
+}
+
+var build = {
+  "weapon 1": match[0],
+  "weapon 2": match[1],
+  "helmet": match[2][0] && match[2][0].toLowerCase() == "head" ? "" : match[2],
+  "cloak": match[3][0] && match[3][0].toLowerCase() == "cloak" ? "" : match[3],
+  "chest": match[4][0] && match[4][0].toLowerCase() == "chest" ? "" : match[4],
+  "hands": match[5][0] && match[5][0].toLowerCase() == "hands" ? "" : match[5],
+  "legs": match[6][0] && match[6][0].toLowerCase() == "legs" ? "" : match[6],
+  "feet": match[7][0] && match[7][0].toLowerCase() == "feet" ? "" : match[7],
+  "necklace": match[8][0] && match[8][0].toLowerCase() == "necklace" ? "" : match[8],
+  "bracelet": match[9][0] && match[9][0].toLowerCase() == "bracelet" ? "" : match[9],
+  "ring1": match[10][0] && match[10][0].toLowerCase() == "ring" ? "" : match[10],
+  "ring2": match[11][0] && match[11][0].toLowerCase() == "ring" ? "" : match[11],
+  "belt": match[12][0] && match[12][0].toLowerCase() == "belt" ? "" : match[12],
+}
+
+}
