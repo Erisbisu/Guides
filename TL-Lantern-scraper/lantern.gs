@@ -1,9 +1,8 @@
 function ScrapeLantern() {
 
-// get raw html data for player builds
+// get player builds from HTML submissions
+
 //var buildurl = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getActiveCell().getValue();
-//url testing
-var buildurl = 'https://throneandliberty.gameslantern.com/builds/9bd5a2bb-218e-4785-a932-553109fd7362/purp';
 var htmlobject = UrlFetchApp.fetch(buildurl);
 var builddata = htmlobject.getContentText();
 
